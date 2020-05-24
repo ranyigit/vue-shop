@@ -4,7 +4,7 @@ export default function axios (option) {
   return new Promise((resolve, reject) => {
   // 1.创建axios的实例
     const instance = originAxios.create({
-      baseURL: 'http://localhost:8088/api/private/v1',
+      baseURL: 'http://localhost:8888/api/private/v1',
       timeout: 5000
     })
 

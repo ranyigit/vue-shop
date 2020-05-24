@@ -24,6 +24,7 @@
 
 <script>
 import { login } from '../network/login'
+import { Message } from 'element-ui'
 export default {
   data () {
     return {
@@ -50,7 +51,9 @@ export default {
         if (valid) {
           // 发起登陆请求
           login(this.loginForm).then(res => {
-            console.log(res)
+            Message.success({
+              message: '登录成功'
+            })
           })
         } else {
           return false
