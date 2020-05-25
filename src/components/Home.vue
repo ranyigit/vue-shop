@@ -40,7 +40,14 @@ import { menus } from '../network/menu'
 export default {
   data () {
     return {
-      meunlist: []
+      meunlist: [],
+      iconObj: [
+        '125': '',
+        '103': '',
+        '': '',
+        '': '',
+        '': ''
+      ]
     }
   },
   created () {
