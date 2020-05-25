@@ -52,7 +52,7 @@ export default {
           // 发起登陆请求
           login(this.loginForm).then(res => {
             Message.success({
-              message: '登录成功'
+              message: '欢迎回来'
             })
           })
         } else {
