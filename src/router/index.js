@@ -16,11 +16,12 @@ const router = new VueRouter({
 // 挂载导航守卫
 router.beforeEach((to, from, next) => {
   // to将要访问的路径
-  if (to.path === '/login') return next()
   const token = window.sessionStorage.getItem('token')
 
+  if (to.path === '/login' && token) return next('/home')
   // 没有token，强制跳转到登录页
-  if (!token) return next('/login')
+  if (to.path !== '/login' && !token) return next('/login')
+
   next()
 })
 

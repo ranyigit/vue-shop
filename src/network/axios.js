@@ -15,9 +15,8 @@ export default function axios (option) {
 
       // 2.某些请求要求用户必须登录, 判断用户是否有token, 如果没有token跳转到login页面
 
-      // 3.对请求的参数进行序列化(看服务器是否需要序列化)
-      // config.data = qs.stringify(config.data)
-      // console.log(config)
+      // 为请求头对象添加 token验证的Authorization字段
+      config.headers.Authorization = window.sessionStorage.getItem('token')
 
       // 4.等等
       return config
