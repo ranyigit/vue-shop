@@ -13,6 +13,7 @@ module.exports = {
   rules: {
     "function-paren-newline": ["error", "never"],
     'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
-    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off'
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'space-befor-function-paren': 0,
   }
 }

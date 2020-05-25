@@ -24,7 +24,6 @@
 
 <script>
 import { login } from '../network/login'
-import { Message } from 'element-ui'
 export default {
   data () {
     return {
@@ -47,13 +46,17 @@ export default {
   },
   methods: {
     login (formName) {
-      this.$refs[formName].validate(valid => {
+      this.$refs[formName].validate(async valid => {
         if (valid) {
           // 发起登陆请求
-          login(this.loginForm).then(res => {
-            Message.success({
-              message: '欢迎回来'
+          await login(this.loginForm).then(res => {
+            const data = res.data
+            if (data.meta.status !== 200) return this.$message.error('用户名或密码错误')
+            this.$message.success({
+              message: '登录成功'
             })
+            window.sessionStorage.setItem('token', data.data.token)
+            this.$router.push('/home')
           })
         } else {
           return false
