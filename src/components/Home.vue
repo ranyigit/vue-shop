@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    home
+    <el-button type="info" @click="logout">退出</el-button>
   </div>
 </template>
 
@@ -9,7 +9,17 @@ export default {
   data () {
     return {}
   },
-  methods: {}
+  methods: {
+    logout () {
+      this.$confirm('是否退出登陆？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(() => {
+        window.sessionStorage.removeItem('token')
+        this.$router.push('/login')
+      })
+    }
+  }
 }
 </script>
 

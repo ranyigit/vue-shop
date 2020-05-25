@@ -4,7 +4,8 @@ import {
   Form,
   FormItem,
   Input,
-  Message
+  Message,
+  MessageBox
 } from 'element-ui'
 
 Vue.use(Button)
@@ -12,3 +13,6 @@ Vue.use(Form)
 Vue.use(FormItem)
 Vue.use(Input)
 Vue.prototype.$message = Message
+Vue.prototype.$msgbox = MessageBox
+Vue.prototype.$alert = MessageBox.alert
+Vue.prototype.$confirm = MessageBox.confirm
