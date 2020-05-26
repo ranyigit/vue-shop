@@ -75,7 +75,7 @@ export default {
       }).then(() => {
         window.sessionStorage.removeItem('token')
         this.$router.push('/login')
-      })
+      }).catch(e => e)
     },
     async getMenuList () {
       await menus().then(res => {
