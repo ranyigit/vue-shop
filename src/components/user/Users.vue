@@ -19,7 +19,7 @@
         </el-col>
       </el-row>
       <!-- 用户列表 -->
-      <el-table :data="userlist" border stripe>
+      <el-table :data="userlist" border stripe  v-loading="loading">
         <el-table-column type="index"  label="id"></el-table-column>
         <el-table-column prop="username"  label="姓名"></el-table-column>
         <el-table-column prop="email" label="邮箱"></el-table-column>
@@ -146,6 +146,7 @@ export default {
       userlist: [],
       userInfo: [],
       rolesList: [],
+      loading: true,
       // 已选择的角色ID值
       selectedRoleId: '',
       total: 0,
@@ -200,6 +201,7 @@ export default {
         if (data.meta.status !== 200) {
           this.$message.error('获取用户列表失败')
         }
+        this.loading = false
         this.userlist = data.data.users
         this.total = data.data.total
       })
