@@ -47,3 +47,13 @@ export function userDelete (userInfo) {
     method: 'delete'
   })
 }
+
+export function addUserRole (params) {
+  return axios({
+    url: `users/${params.uid}/role`,
+    method: 'put',
+    data: {
+      rid: params.rid
+    }
+  })
+}
