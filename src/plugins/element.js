@@ -28,10 +28,12 @@ import {
   Tree,
   Tag,
   Select,
-  Option
+  Option,
+  Loading
 } from 'element-ui'
 
-Vue.directive('loading', {})
+Vue.use(Loading)
+
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)

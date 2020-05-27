@@ -7,7 +7,7 @@
       <el-breadcrumb-item>角色列表</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片区域 -->
-    <el-card>
+    <el-card  v-loading="loading">
       <!-- 添加角色按钮区 -->
       <el-row>
         <el-col>
@@ -80,6 +80,7 @@ export default {
       setRightDialogVisible: false,
       rolesList: [],
       rightsList: [],
+      loading: true,
       treeProps: {
         children: 'children',
         label: 'authName'
@@ -96,6 +97,7 @@ export default {
     getRolesList () {
       rolesList().then(res => {
         const data = res.data
+        this.loading = false
         this.messageInfo(data)
         this.rolesList = data.data
       })

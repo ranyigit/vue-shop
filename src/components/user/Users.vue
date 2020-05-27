@@ -198,10 +198,10 @@ export default {
     getUserList () {
       userList(this.queryInfo).then(res => {
         const data = res.data
+        this.loading = false
         if (data.meta.status !== 200) {
           this.$message.error('获取用户列表失败')
         }
-        this.loading = false
         this.userlist = data.data.users
         this.total = data.data.total
       })
