@@ -29,11 +29,11 @@ import {
   Tag,
   Select,
   Option,
-  Loading
+  Loading,
+  Cascader
 } from 'element-ui'
 
 Vue.use(Loading)
-
 Vue.use(Button)
 Vue.use(Form)
 Vue.use(FormItem)
@@ -61,6 +61,7 @@ Vue.use(Tree)
 Vue.use(Tag)
 Vue.use(Select)
 Vue.use(Option)
+Vue.use(Cascader)
 Vue.prototype.$message = Message
 Vue.prototype.$msgbox = MessageBox
 Vue.prototype.$alert = MessageBox.alert
