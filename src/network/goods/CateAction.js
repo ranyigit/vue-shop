@@ -23,11 +23,11 @@ export function queryCateById (cid) {
   })
 }
 
-export function updateCate (params) {
+export function updateCate (cid, params) {
   return axios({
-    url: `/categories/${params.cid}`,
+    url: `/categories/${cid}`,
     method: 'put',
-    data: { cat_name: params.cat_name }
+    data: params
   })
 }
 

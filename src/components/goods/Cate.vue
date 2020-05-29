@@ -50,8 +50,10 @@
           </template>
         </el-table-column>
         <el-table-column label="操作">
-          <el-button type="primary" icon="el-icon-edit" size="mini">编辑</el-button>
-          <el-button type="danger" icon="el-icon-delete" size="mini">删除</el-button>
+          <template #default="scope">
+            <el-button type="primary" icon="el-icon-edit" size="mini" @click="editCate(scope.row)">编辑</el-button>
+            <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteCate(scope.row)">删除</el-button>
+          </template>
         </el-table-column>
       </el-table>
       <!-- 分页 -->
@@ -65,6 +67,7 @@
         :total="total">
       </el-pagination>
     </el-card>
+    <!-- 添加分类 -->
     <el-dialog title="添加分类" :visible.sync="setCateDialogVisible" @close="setCateDialogClosed" width="50%">
       <el-form :model="addCateForm" :rules="rules" ref="cateForm" label-width="100px">
         <el-form-item label="分类名称" prop="cat_name">
@@ -79,11 +82,23 @@
         <el-button type="primary" @click="addCate('cateForm')">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 编辑分类 -->
+    <el-dialog title="编辑分类" :visible.sync="setEditDialogVisible" @close="setEditDialogClosed" width="50%">
+      <el-form :model="editForm" :rules="rules" ref="editFormRef" label-width="100px">
+        <el-form-item label="分类名称" prop="cat_name">
+          <el-input v-model="editForm.cat_name"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="setEditDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="saveCate('editFormRef')">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getCateList, addCate } from '../../network/goods/CateAction'
+import { getCateList, queryCateById, addCate, updateCate, deleteCate } from '../../network/goods/CateAction'
 export default {
   data () {
     return {
@@ -97,6 +112,7 @@ export default {
       parentCateList: [],
       selectKeys: [],
       total: 0,
+      cat_id: '',
       columns: [
         { label: '分类名称', prop: 'cat_name' },
         // 将当前列定义为模板列
@@ -110,6 +126,10 @@ export default {
         children: 'children'
       },
       setCateDialogVisible: false,
+      setEditDialogVisible: false,
+      editForm: {
+        cat_name: ''
+      },
       addCateForm: {
         cat_name: '',
         cat_pid: 0,
@@ -139,7 +159,7 @@ export default {
       if (data.meta.status !== 200) {
         this.$message.error(data.meta.msg)
       }
-      this.$message.success(data.meta.msg)
+      // this.$message.success(data.meta.msg)
     },
     // 监听每页显示多少条
     handleSizeChange (newSize) {
@@ -160,6 +180,15 @@ export default {
     // 弹框关闭事件
     setCateDialogClosed () {
       this.setCateDialogVisible = false
+      this.$refs.cateForm.resetFields()
+      this.selectKeys = []
+      this.addCateForm.cat_pid = 0
+      this.addCateForm.cat_level = 0
+    },
+    // 编辑分类弹框关闭
+    setEditDialogClosed () {
+      this.setEditDialogVisible = false
+      this.$refs.editFormRef.resetFields()
     },
     async getParentCateList () {
       await getCateList({ type: 2 }).then(res => {
@@ -189,6 +218,35 @@ export default {
           this.getCateList()
         })
       })
+    },
+    saveCate (formName) {
+      this.$refs[formName].validate(async valid => {
+        if (!valid) return
+        await updateCate(this.cat_id, this.editForm).then(res => {
+          this.messageInfo(res.data)
+          this.setEditDialogVisible = false
+          this.getCateList()
+        })
+      })
+    },
+    async editCate (catInfo) {
+      this.setEditDialogVisible = true
+      this.cat_id = catInfo.cat_id
+      await queryCateById(catInfo.cat_id).then(res => {
+        this.messageInfo(res.data)
+        this.editForm.cat_name = res.data.data.cat_name
+      })
+    },
+    deleteCate (catInfo) {
+      this.$confirm(`确认删除分类【${catInfo.cat_name}】？`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(async () => {
+        await deleteCate(catInfo.cat_id).then(res => {
+          this.messageInfo(res.data)
+          this.getCateList()
+        })
+      }).catch(err => err)
     }
   }
 }
