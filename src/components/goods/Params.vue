@@ -177,7 +177,10 @@ export default {
         if (!valid) return
         this.addParamsForm.attr_sel = this.activeName
         await addParams(this.cat_id, this.addParamsForm).then(res => {
-          this.messageInfo(res.data)
+          if (res.data.meta.status !== 201) {
+            this.$message.error(res.data.meta.msg)
+          }
+          this.addParamsDialogVisable = false
           this.getParamsData()
         })
       })
