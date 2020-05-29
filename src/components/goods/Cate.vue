@@ -3,7 +3,7 @@
     <!-- 面包屑区域 -->
     <el-breadcrumb separator="/">
       <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-      <el-breadcrumb-item><a href="/">商品管理</a></el-breadcrumb-item>
+      <el-breadcrumb-item><a href="/categories">商品管理</a></el-breadcrumb-item>
       <el-breadcrumb-item>商品分类</el-breadcrumb-item>
     </el-breadcrumb>
     <!-- 卡片区域 -->
@@ -121,6 +121,7 @@ export default {
         { label: '操作', type: 'template', template: 'action' }
       ],
       options: {
+        checkStrictly: true,
         label: 'cat_name',
         value: 'cat_id',
         children: 'children'
