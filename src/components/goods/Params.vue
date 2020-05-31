@@ -29,7 +29,21 @@
           <el-button type="primary" :disabled="!isBtnDisabled" @click="addParamsDialogVisable = true">添加参数</el-button>
           <!-- 动态参数表格 -->
           <el-table :data="manyTableData" border stripe>
-            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="expand">
+              <template #default="scope">
+                <el-tag closable v-for="(item, i) in scope.row.attr_vals" :key="i">{{item}}</el-tag>
+                <el-input
+                  class="input-new-tag"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)">
+                </el-input>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ New Tag</el-button>
+              </template>
+            </el-table-column>
             <el-table-column type="index" label="#"></el-table-column>
             <el-table-column label="参数名称" prop="attr_name"></el-table-column>
             <el-table-column label="操作">
@@ -165,6 +179,12 @@ export default {
     async getParamsData () {
       await paramsList(this.cat_id, { sel: this.activeName }).then(res => {
         this.messageInfo(res.data)
+        res.data.data.forEach(item => {
+          item.attr_vals = item.attr_vals ? item.attr_vals.split(' ') : []
+          // 控制文本框的显示与隐藏
+          item.inputVisible = false
+          item.inputValue = ''
+        })
         if (this.activeName === 'many') {
           this.manyTableData = res.data.data
         } else {
@@ -222,6 +242,29 @@ export default {
           this.getParamsData()
         })
       }).catch(err => err)
+    },
+    async handleInputConfirm (row) {
+      if (row.inputValue.length === 0) {
+        row.inputVisible = false
+        row.inputValue = ''
+        return
+      }
+      row.attr_vals.push(row.inputValue.trim())
+      row.inputVisible = false
+      row.inputValue = ''
+      this.editParamsForm.attr_name = row.attr_name
+      this.editParamsForm.attr_sel = this.activeName
+      this.editParamsForm.attr_vals = row.attr_vals.join(' ')
+      await updateParams(this.cat_id, row.attr_id, this.editParamsForm).then(res => {
+        this.messageInfo(res.data)
+        // this.getParamsData()
+      })
+    },
+    showInput (row) {
+      row.inputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
     }
   }
 }
@@ -231,4 +274,19 @@ export default {
 .cat_opt {
   margin: 15px 0;
 }
+.el-tag + .el-tag {
+    margin-left: 10px;
+  }
+  .button-new-tag {
+    margin-left: 10px;
+    height: 32px;
+    line-height: 30px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+  .input-new-tag {
+    width: 90px;
+    margin-left: 10px;
+    vertical-align: bottom;
+  }
 </style>
