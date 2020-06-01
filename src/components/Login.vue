@@ -11,7 +11,7 @@
           <el-input  prefix-icon="el-icon-user" v-model="loginForm.username"></el-input>
         </el-form-item>
         <el-form-item placeholder="密码" prop="password">
-          <el-input type="password"  prefix-icon="el-icon-lock" v-model="loginForm.password"></el-input>
+          <el-input type="password"  prefix-icon="el-icon-lock" v-model="loginForm.password" @keyup.enter.native="login('loginForm')"></el-input>
         </el-form-item>
         <el-form-item class="btns">
           <el-button type="primary" @click="login('loginForm')">登陆</el-button>
@@ -28,8 +28,8 @@ export default {
   data () {
     return {
       loginForm: {
-        username: '',
-        password: ''
+        username: 'admin',
+        password: '123456'
       },
       // 表单验证规则对象
       rules: {

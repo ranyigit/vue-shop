@@ -31,7 +31,7 @@
           <el-table :data="manyTableData" border stripe>
             <el-table-column type="expand">
               <template #default="scope">
-                <el-tag closable v-for="(item, i) in scope.row.attr_vals" :key="i">{{item}}</el-tag>
+                <el-tag closable v-for="(item, i) in scope.row.attr_vals" :key="i" @close="handleClose(i,scope.row)">{{item}}</el-tag>
                 <el-input
                   class="input-new-tag"
                   v-if="scope.row.inputVisible"
@@ -58,13 +58,27 @@
           <el-button type="primary" :disabled="!isBtnDisabled" @click="addParamsDialogVisable = true">添加参数</el-button>
           <!-- 静态参数表格 -->
           <el-table :data="onlyTableData" border stripe>
-            <el-table-column type="expand"></el-table-column>
+            <el-table-column type="expand">
+              <template #default="scope">
+                <el-tag closable v-for="(item, i) in scope.row.attr_vals" :key="i" @close="handleClose(i,scope.row)">{{item}}</el-tag>
+                <el-input
+                  class="input-new-tag"
+                  v-if="scope.row.inputVisible"
+                  v-model="scope.row.inputValue"
+                  ref="saveTagInput"
+                  size="small"
+                  @keyup.enter.native="handleInputConfirm(scope.row)"
+                  @blur="handleInputConfirm(scope.row)">
+                </el-input>
+                <el-button v-else class="button-new-tag" size="small" @click="showInput(scope.row)">+ New Tag</el-button>
+              </template>
+            </el-table-column>
             <el-table-column type="index" label="#"></el-table-column>
             <el-table-column label="参数名称" prop="attr_name"></el-table-column>
             <el-table-column label="操作">
               <template #default="scope">
                 <el-button type="primary" icon="el-icon-edit" size="mini" @click="showEditDialog(scope.row)">编辑</el-button>
-                <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteParams(scope.row)">>删除</el-button>
+                <el-button type="danger" icon="el-icon-delete" size="mini" @click="deleteParams(scope.row)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -167,6 +181,8 @@ export default {
     handChangeSelect () {
       if (this.selectKeys.length !== 3) {
         this.selectKeys = []
+        this.manyTableData = []
+        this.onlyTableData = []
         return
       }
       this.cat_id = this.selectKeys[this.selectKeys.length - 1]
@@ -243,7 +259,7 @@ export default {
         })
       }).catch(err => err)
     },
-    async handleInputConfirm (row) {
+    handleInputConfirm (row) {
       if (row.inputValue.length === 0) {
         row.inputVisible = false
         row.inputValue = ''
@@ -252,6 +268,15 @@ export default {
       row.attr_vals.push(row.inputValue.trim())
       row.inputVisible = false
       row.inputValue = ''
+      this.saveAttrVals(row)
+    },
+    showInput (row) {
+      row.inputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+    async saveAttrVals (row) {
       this.editParamsForm.attr_name = row.attr_name
       this.editParamsForm.attr_sel = this.activeName
       this.editParamsForm.attr_vals = row.attr_vals.join(' ')
@@ -260,11 +285,9 @@ export default {
         // this.getParamsData()
       })
     },
-    showInput (row) {
-      row.inputVisible = true
-      this.$nextTick(_ => {
-        this.$refs.saveTagInput.$refs.input.focus()
-      })
+    handleClose (i, row) {
+      row.attr_vals.splice(i, 1)
+      this.saveAttrVals(row)
     }
   }
 }
