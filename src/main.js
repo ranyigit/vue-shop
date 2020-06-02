@@ -6,8 +6,15 @@ import './plugins/element.js'
 import './assets/css/global.css'
 // import TreeTable from 'vue-table-with-tree-grid'
 
-Vue.config.productionTip = false
+// 导入富文本编辑起对用的样式
+import 'quill/dist/quill.core.css'
+import 'quill/dist/quill.snow.css'
+import 'quill/dist/quill.bubble.css'
+import { quillEditor } from 'vue-quill-editor'
 
+Vue.config.productionTip = false
+// 将富文本编辑器注册为全局可用
+Vue.component('quill-editor', quillEditor)
 // Vue.component('tree-table', TreeTable)
 Vue.filter('dateFormat', function (originVal) {
   const dt = new Date(originVal)

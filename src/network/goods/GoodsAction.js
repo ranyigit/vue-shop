@@ -37,3 +37,7 @@ export function deleteGoods (gid) {
     method: 'delete'
   })
 }
+
+export function uploadUrl () {
+  return axios({})
+}
