@@ -12,9 +12,12 @@ import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import { quillEditor } from 'vue-quill-editor'
 
+import ECharts from 'vue-echarts'
+
 Vue.config.productionTip = false
 // 将富文本编辑器注册为全局可用
 Vue.component('quill-editor', quillEditor)
+Vue.component('v-chart', ECharts)
 // Vue.component('tree-table', TreeTable)
 Vue.filter('dateFormat', function (originVal) {
   const dt = new Date(originVal)
