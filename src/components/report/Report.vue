@@ -17,6 +17,7 @@
 import _ from 'lodash'
 import { getEchartsData } from '../../network/report/ReportAction'
 import 'echarts/lib/chart/line'
+import 'echarts/lib/component/tooltip'
 export default {
   data () {
     return {
@@ -52,19 +53,14 @@ export default {
       }
     }
   },
-  created () {
-    this.test()
-  },
+  created () {},
   mounted () {
+    getEchartsData().then(res => {
+      this.options = _.merge(res.data.data, this.options)
+      console.log(this.options)
+    })
   },
-  methods: {
-    test () {
-      getEchartsData().then(res => {
-        this.options = _.merge(res.data.data, this.options)
-        console.log(this.options)
-      })
-    }
-  }
+  methods: {}
 }
 </script>
 
