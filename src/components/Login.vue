@@ -24,6 +24,7 @@
 
 <script>
 import { login } from '../network/login'
+import { initDynamicRoutes } from '../router'
 export default {
   data () {
     return {
@@ -56,6 +57,9 @@ export default {
               message: '登录成功'
             })
             window.sessionStorage.setItem('token', data.data.token)
+            // 根据用户所具备的权限，动态添加路由规则
+            initDynamicRoutes()
+
             this.$router.push('/home')
           })
         } else {

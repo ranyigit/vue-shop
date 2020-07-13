@@ -5,8 +5,12 @@
 </template>
 
 <script>
+import { initDynamicRoutes } from './router'
 export default {
-  name: 'app'
+  name: 'app',
+  created () {
+    initDynamicRoutes()
+  }
 }
 </script>
 
