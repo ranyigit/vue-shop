@@ -1,3 +1,5 @@
+const { resolve } = require('path')
+
 module.exports = {
   // 自定义打包入口
   chainWebpack: config => {
@@ -31,5 +33,12 @@ module.exports = {
         return args
       })
     })
+  },
+  configureWebpack: {
+    resolve: {
+      alias: {
+        "@": resolve(__dirname, './src')
+      }
+    }
   }
 }

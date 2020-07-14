@@ -48,6 +48,7 @@
 
 <script>
 import { menus } from '../network/menu'
+import { mapState, mapMutations } from 'vuex'
 export default {
   data () {
     return {
@@ -66,22 +67,28 @@ export default {
   created () {
     this.getMenuList()
     this.activePath = window.sessionStorage.getItem('activePath')
+    this.meunlist = this.rightList
   },
   methods: {
+    ...mapMutations(['setRight']),
     logout () {
       this.$confirm('是否退出登陆？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消'
       }).then(() => {
-        window.sessionStorage.removeItem('token')
-        this.$router.push('/login')
+        // window.sessionStorage.removeItem('token')
+        sessionStorage.clear()
+        // 删除vuex中的数据，让当前界面刷新
+        window.location.reload()
+        // this.$router.push('/login')
       }).catch(e => e)
     },
     async getMenuList () {
       await menus().then(res => {
         const data = res.data
         if (data.meta.status !== 200) return this.$message.error(data.meta.msg)
-        this.meunlist = data.data
+        // this.meunlist = data.data
+        this.setRight(data.data)
       })
     },
     toggleCollapse () {
@@ -91,6 +98,9 @@ export default {
       this.activePath = activePath
       window.sessionStorage.setItem('activePath', activePath)
     }
+  },
+  computed: {
+    ...mapState(['rightList'])
   }
 }
 </script>
