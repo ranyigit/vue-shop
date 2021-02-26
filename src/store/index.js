@@ -11,7 +11,7 @@ export default new Vuex.Store({
   mutations: {
     setRight (state, rights) {
       state.rightList = rights
-      sessionStorage.setItem('rightList', JSON.stringify(rights))
+      window.sessionStorage.setItem('rightList', JSON.stringify(rights))
     }
   },
   /* actions里面能处理任意异步操作

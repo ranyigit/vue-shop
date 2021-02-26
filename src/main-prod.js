@@ -6,7 +6,7 @@ import store from './store'
 // 导入全局样式表
 import './assets/css/global.css'
 // import TreeTable from 'vue-table-with-tree-grid'
-
+import './utils/permission.js'
 // 导入富文本编辑起对用的样式
 // import 'quill/dist/quill.core.css'
 // import 'quill/dist/quill.snow.css'

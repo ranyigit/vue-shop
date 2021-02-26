@@ -87,7 +87,7 @@ export default {
       await menus().then(res => {
         const data = res.data
         if (data.meta.status !== 200) return this.$message.error(data.meta.msg)
-        // this.meunlist = data.data
+        this.meunlist = data.data
         this.setRight(data.data)
       })
     },

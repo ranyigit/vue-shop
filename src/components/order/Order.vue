@@ -141,7 +141,7 @@ export default {
     // 监听每页显示多少条
     handleSizeChange (newSize) {
       this.queryInfo.pagesize = newSize
-      this.orderList()()
+      this.orderList()
     },
     // 监听翻页
     handleCurrentChange (newPage) {
@@ -161,7 +161,6 @@ export default {
   },
   filters: {
     date (...values) {
-      console.log(values)
       return jutils.formatDate(new Date(values[0]), values[1])
     }
   }

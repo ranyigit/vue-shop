@@ -14,6 +14,7 @@ import 'quill/dist/quill.bubble.css'
 import { quillEditor } from 'vue-quill-editor'
 
 import ECharts from 'vue-echarts'
+import './utils/permission.js'
 
 Vue.config.productionTip = false
 // 将富文本编辑器注册为全局可用

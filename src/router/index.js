@@ -46,15 +46,6 @@ const routes = [
     redirect: '/welcome',
     children: [
       { path: '/welcome', component: Welcome }
-      // { path: '/users', component: Users },
-      // { path: '/rights', component: Rights },
-      // { path: '/roles', component: Roles },
-      // { path: '/categories', component: Cate },
-      // { path: '/params', component: Params },
-      // { path: '/goods', component: Goods },
-      // { path: '/goods/add', component: AddGoods },
-      // { path: '/orders', component: Order },
-      // { path: '/reports', component: Report }
     ]
   }
 ]
@@ -79,9 +70,22 @@ export function initDynamicRoutes() {
   // 根据二级权限，对路由规则动态的添加
   const currentRoutes = router.options.routes
   const rightList = store.state.rightList
+  if (rightList.length === 0) return
+  // 商品管理模块模拟操作权限
+  rightList[2].children[0].rights = ['view', 'add', 'edit']
   rightList.forEach(item => {
     item.children.forEach(route => {
-      currentRoutes[2].children.push(ruleMapping[route.path])
+      const temp = ruleMapping[route.path]
+      temp.meta = route.rights
+      currentRoutes[2].children.push(temp)
+      if (route.rights && route.rights.length) {
+        route.rights.forEach(right => {
+          // 匹配 goods.add  goods.edit
+          if (ruleMapping[`${route.path}.${right}`]) {
+            currentRoutes[2].children.push(ruleMapping[route.path + '.' + right])
+          }
+        })
+      }
     })
   })
   // ！！！一定要最后添加 404路由

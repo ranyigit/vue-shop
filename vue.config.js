@@ -24,7 +24,6 @@ module.exports = {
       })
       
     })
-    
 
     // 开发模式
     config.when(process.env.NODE_ENV === 'development', config => {
